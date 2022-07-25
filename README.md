@@ -1,6 +1,6 @@
 # 文件预览
 > - 支持预览类型有：视频，音频，pdf，img
-> - 依赖与 less，element-ui，vue-aliplayer-v2，vue-pdf，
+> - 依赖于 less，element-ui，vue-aliplayer-v2，vue-pdf，
 > @liripeng/vue-audio-player 以及vue2版本
 
 ## 实例
