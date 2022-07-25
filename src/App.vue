@@ -4,7 +4,7 @@
     <el-button @click="wayPlayer">视频</el-button>
     <el-button @click="wayAudioList">音频</el-button>
     <el-button @click="wayPdfUrl">pdf</el-button>
-    <Preview :item="datas"/>
+    <Preview ref="preview" :item="dataPreview"/>
   </div>
 </template>
 
@@ -20,40 +20,34 @@ export default {
   },
   data() {
     return {
-      datas: {
+      dataPreview: {
         show: false,
         title: '',
         url: '',
         type: ''
       },
-      numPages: [],
-      src: null
     }
   },
   methods: {
     wayImg() {
-      this.datas.show  = true
-      this.datas.title = '图片'
-      this.datas.type  = 'img'
-      this.datas.url   = img//'https://bqb12.bingping.top/Uploads/vod/2019-02-27/5c7562cea3428.jpg'
+      this.dataPreview.show  = true
+      this.dataPreview.title = '图片'
+      this.dataPreview.url   = img//'https://bqb12.bingping.top/Uploads/vod/2019-02-27/5c7562cea3428.jpg'
     },
     wayPlayer() {
-      this.datas.show  = true
-      this.datas.title = 'MP4'
-      this.datas.type  = 'mp4'
-      this.datas.url   = '//player.alicdn.com/video/aliyunmedia.mp4'
+      this.dataPreview.show  = true
+      this.dataPreview.title = 'MP4'
+      this.dataPreview.url   = '//player.alicdn.com/video/aliyunmedia.mp4'
     },
     wayPdfUrl() {
-      this.datas.show  = true
-      this.datas.title = 'pdf'
-      this.datas.type  = 'pdf'
-      this.datas.url   = './demo.pdf'
+      this.dataPreview.show  = true
+      this.dataPreview.title = 'pdf'
+      this.dataPreview.url   = './demo.pdf'
     },
     wayAudioList() {
-      this.datas.show  = true
-      this.datas.title = 'mp3'
-      this.datas.type  = 'mp3'
-      this.datas.url   = falling
+      this.dataPreview.show  = true
+      this.dataPreview.title = 'mp3'
+      this.dataPreview.url   = falling
     }
   }
 }
