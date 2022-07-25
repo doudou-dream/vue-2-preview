@@ -4,7 +4,7 @@
     <el-button @click="wayPlayer">视频</el-button>
     <el-button @click="wayAudioList">音频</el-button>
     <el-button @click="wayPdfUrl">pdf</el-button>
-    <Preview ref="preview" :item="dataPreview"/>
+    <Preview ref="preview" :item="dataPreview" is-dialog/>
   </div>
 </template>
 
@@ -24,17 +24,16 @@ export default {
         show: false,
         title: '',
         url: '',
-        type: ''
       },
     }
   },
   methods: {
-    wayImg() {
+    async wayImg() {
       this.dataPreview.show  = true
       this.dataPreview.title = '图片'
       this.dataPreview.url   = img//'https://bqb12.bingping.top/Uploads/vod/2019-02-27/5c7562cea3428.jpg'
     },
-    wayPlayer() {
+    async wayPlayer() {
       this.dataPreview.show  = true
       this.dataPreview.title = 'MP4'
       this.dataPreview.url   = '//player.alicdn.com/video/aliyunmedia.mp4'

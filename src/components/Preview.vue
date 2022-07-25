@@ -6,6 +6,7 @@ import VueAliplayerV2 from 'vue-aliplayer-v2'
 export default {
   name: 'HelloWorld',
   props: {
+    //基础参数
     item: {
       type: Object,
       default: () => {
@@ -17,6 +18,11 @@ export default {
           type: ''// img,mp4,mp3,pdf
         }
       }
+    },
+    // 是否弹窗
+    isDialog: {
+      type: Boolean,
+      default: () => false
     }
   },
   components: {
@@ -26,6 +32,8 @@ export default {
   },
   data() {
     return {
+      // 文件类型
+      fileType: '',
       //img 图片
       imgUrl: '',
       //pdf
@@ -51,41 +59,21 @@ export default {
     }
   },
   watch: {
-    'item.show': {
-      handler: function (boo) {
-        if (!boo) {
+    'item.url': {
+      handler: function () {
+        if ((this.isDialog && !this.item.show) || !this.item.url) {
           return false
         }
-        if (!this.item.type) {
-          this.item.type = this.getFormat(this.item.url)
+        if (!this.item?.type) {
+          this.fileType = this.getFormat(this.item.url)
         }
-        // 数据初始化
-        switch (this.item.type) {
-          case 'img':
-            this.imgUrl = this.item.url
-            break
-          case 'mp3':
-            this.audioList[0].url = this.item.url
-            break
-          case 'mp4':
-            this.aliplayer.source        = this.item.url
-            this.aliplayer.options.cover = this.item.cover
-            break
-          case 'pdf':
-            this.pdf.src = pdf.createLoadingTask(this.item.url) || {}
-            this.pdf.src.promise.then(pdf => {
-              for (let i = 1; pdf.numPages >= i; i++) {
-                this.pdf.arrPages.push(i)
-              }
-            })
-            break
-        }
+        this.initData()
       }
     }
   },
   render() {
     let temp = <el-empty description="空"></el-empty>
-    switch (this.item.type) {
+    switch (this.fileType) {
       case'img':
         temp =
             <div style="display: flex;flex-direction: column;justify-content: center;align-items: center;">
@@ -124,25 +112,52 @@ export default {
             <div style="overflow:auto;display: block;height: 100%">
               {
                 this.pdf.arrPages.map(val => {
-                  return <pdf key={val} page={val} src={this.pdf.src}/>
+                  return <pdf key={val.id} page={val.page} src={this.pdf.src}/>
                 })
               }
             </div>
         break
     }
-    return (
-        <el-dialog
-            v-on:close={this.wayClose}
-            title={this.item.title}
-            visible={this.item.show}
-            {...{on: {'update:visible': val => this.item.show = val}}}
-            append-to-body
-            width="80%">
-          {temp}
-        </el-dialog>
-    )
+    if (this.isDialog) {
+      return (
+          <el-dialog
+              v-on:close={this.wayClose}
+              title={this.item.title}
+              visible={this.item.show}
+              {...{on: {'update:visible': val => this.item.show = val}}}
+              append-to-body
+              width="80%">
+            {temp}
+          </el-dialog>
+      )
+    }
+    return (temp)
   },
   methods: {
+    // 数据初始化
+    initData() {
+      // 数据初始化
+      switch (this.fileType) {
+        case 'img':
+          this.imgUrl = this.item.url
+          break
+        case 'mp3':
+          this.audioList[0].url = this.item.url
+          break
+        case 'mp4':
+          this.aliplayer.source        = this.item.url
+          this.aliplayer.options.cover = this.item.cover
+          break
+        case 'pdf':
+          this.pdf.src = pdf.createLoadingTask(this.item.url) || {}
+          this.pdf.src.promise.then(pdf => {
+            for (let i = 1; pdf.numPages >= i; i++) {
+              this.pdf.arrPages.push({page: i, id: +i + (Math.random() * 1000).toFixed(0)})
+            }
+          })
+          break
+      }
+    },
     // 输入文件地址','返回文件格式
     getFormat(value) {
       let arr = value.match(/^.*\.(.{3,4})$/)
@@ -172,6 +187,8 @@ export default {
       //数据清空
       // 类型
       this.item.type               = ''
+      this.item.url                = ''
+      this.fileType                = ''
       // pdf
       this.pdf.src                 = null
       this.pdf.arrPages            = []
@@ -182,12 +199,27 @@ export default {
       // 视频
       this.aliplayer.source        = ''
       this.aliplayer.options.cover = ''
+    },
+    // 延迟执行
+    delay(ms) {
+      new Promise((resolve) => setTimeout(resolve, ms))
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
+//音频倍速宽度处理
+
+::v-deep .audio__play-rate__dropdown {
+  width: 2rem;
+  display: flex;
+  padding: 0.5rem 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .placeholder {
   height: 5rem;
   width: 5rem;
