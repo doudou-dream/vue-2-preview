@@ -31,7 +31,7 @@ export default {
       //pdf
       audioList: [
         {
-          name: '音频1',
+          name: '',
           url: '',
         },
       ],
