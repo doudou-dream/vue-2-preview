@@ -44,17 +44,32 @@ export default {
         }
       },
       // pdf地址
-      pdfUrl: ''
+      pdf: {
+        numPages: [],
+        src: null
+      }
     }
   },
   watch: {
     'item.show': {
       handler: function () {
+        this.pdf.src                 = null
+        this.pdf.numPages            = []
         this.audioList[0].url        = this.item.url
         this.aliplayer.source        = this.item.url
-        this.pdfUrl                  = this.item.url
         this.imgUrl                  = this.item.url
         this.aliplayer.options.cover = this.item.cover
+        switch (this.item.type) {
+            // pdf渲染
+          case 'pdf':
+            this.pdf.src = pdf.createLoadingTask(this.item.url) || {}
+            this.pdf.src.promise.then(pdf => {
+              for (let i = 1; pdf.numPages >= i; i++) {
+                this.pdf.numPages.push(i)
+              }
+            })
+            break
+        }
       }
     }
   },
@@ -97,7 +112,11 @@ export default {
       case'pdf':
         temp =
             <div style="overflow:auto;display: block;height: 100%">
-              <pdf src={this.pdfUrl}></pdf>
+              {
+                this.pdf.numPages.map(val => {
+                  return <pdf key={val} page={val} src={this.pdf.src}/>
+                })
+              }
             </div>
         break
     }
@@ -109,8 +128,7 @@ export default {
             append-to-body
             width="80%">{temp}</el-dialog>)
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 

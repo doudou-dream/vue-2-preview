@@ -11,11 +11,12 @@
 <script>
 import Preview from './components/Preview.vue'
 import falling from './assets/falling-star.mp3'
+import img from './assets/95890a3542124e3aaf7c6fa2f99af45d.jpg'
 
 export default {
   name: 'App',
   components: {
-    Preview
+    Preview,
   },
   data() {
     return {
@@ -24,15 +25,17 @@ export default {
         title: '',
         url: '',
         type: ''
-      }
+      },
+      numPages: [],
+      src: null
     }
   },
   methods: {
     wayImg() {
-      this.datas.show = true
+      this.datas.show  = true
       this.datas.title = '图片'
-      this.datas.type = 'img'
-      this.datas.url  = 'https://bqb12.bingping.top/Uploads/vod/2019-02-27/5c7562cea3428.jpg'
+      this.datas.type  = 'img'
+      this.datas.url   = img//'https://bqb12.bingping.top/Uploads/vod/2019-02-27/5c7562cea3428.jpg'
     },
     wayPlayer() {
       this.datas.show  = true
