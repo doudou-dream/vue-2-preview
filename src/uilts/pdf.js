@@ -1,10 +1,12 @@
 /**
- path: src/utils/htmlToPdf.js
- name: 导出页面为PDF格式
+ * 导出页面为PDF格式
  **/
 import html2Canvas from 'html2canvas'
 import JsPDF from 'jspdf'
 
+/**
+ * @param title = 标题
+ */
 export const htmlToPdf = (title) => {
     html2Canvas(document.querySelector('#pdfDom'), {
         allowTaint: true,
