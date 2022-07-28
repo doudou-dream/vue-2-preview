@@ -2,6 +2,7 @@
 import pdf from 'vue-pdf'
 import AudioPlayer from '@liripeng/vue-audio-player'
 import VueAliplayerV2 from 'vue-aliplayer-v2'
+import {htmlToPdf} from '@/uilts/pdf'
 
 export default {
   name: 'HelloWorld',
@@ -109,12 +110,15 @@ export default {
         break
       case'pdf':
         temp =
-            <div style="overflow:auto;display: block;height: 100%">
-              {
-                this.pdf.arrPages.map(val => {
-                  return <pdf key={val.id} page={val.page} src={this.pdf.src}/>
-                })
-              }
+            <div>
+              <el-button v-on:click={this.wayToPdf}>导出</el-button>
+              <div class="pdfDom" style="overflow:auto;display: block;height: 100%">
+                {
+                  this.pdf.arrPages.map(val => {
+                    return <pdf key={val.id} page={val.page} src={this.pdf.src}/>
+                  })
+                }
+              </div>
             </div>
         break
     }
@@ -200,9 +204,9 @@ export default {
       this.aliplayer.source        = ''
       this.aliplayer.options.cover = ''
     },
-    // 延迟执行
-    delay(ms) {
-      new Promise((resolve) => setTimeout(resolve, ms))
+    // 导出
+    wayToPdf() {
+      htmlToPdf('.pdfDom','测试')
     }
   }
 }

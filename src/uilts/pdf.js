@@ -5,12 +5,13 @@ import html2Canvas from 'html2canvas'
 import JsPDF from 'jspdf'
 
 /**
+ * @param pdfDom dom属性
  * @param title = 标题
  */
-export const htmlToPdf = (title) => {
+export const htmlToPdf = (pdfDom, title) => {
     const width  = 592.28// pdf宽度
     const height = 841.89 // pdf高度
-    html2Canvas(document.querySelector('#pdfDom'), {
+    html2Canvas(document.querySelector(pdfDom), {
         allowTaint: true,
     }).then(canvas => {
         //内容的宽度
