@@ -1,5 +1,5 @@
 <script>
-import pdf from 'vue-pdf'
+import pdf from './Pdf'
 import AudioPlayer from '@liripeng/vue-audio-player'
 import VueAliplayerV2 from 'vue-aliplayer-v2'
 import {htmlToPdf} from '@/uilts/pdf'
@@ -54,7 +54,6 @@ export default {
       },
       // pdf地址
       pdf: {
-        arrPages: [],
         src: null
       }
     }
@@ -113,11 +112,7 @@ export default {
             <div>
               <el-button v-on:click={this.wayToPdf}>导出</el-button>
               <div class="pdfDom" style="overflow:auto;display: block;height: 100%">
-                {
-                  this.pdf.arrPages.map(val => {
-                    return <pdf key={val.id} page={val.page} src={this.pdf.src}/>
-                  })
-                }
+                <pdf src={this.pdf.src}/>
               </div>
             </div>
         break
@@ -153,12 +148,7 @@ export default {
           this.aliplayer.options.cover = this.item.cover
           break
         case 'pdf':
-          this.pdf.src = pdf.createLoadingTask(this.item.url) || {}
-          this.pdf.src.promise.then(pdf => {
-            for (let i = 1; pdf.numPages >= i; i++) {
-              this.pdf.arrPages.push({page: i, id: +i + (Math.random() * 1000).toFixed(0)})
-            }
-          })
+          this.pdf.src =this.item.url
           break
       }
     },
